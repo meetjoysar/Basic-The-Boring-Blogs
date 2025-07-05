@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Posts{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('blog.create') }}">New</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        <article class="post">
+            <header>
+                <div>
+                    <h1>{{ post['title'] }}</h1>
+                    <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%d-%m-%Y') }}</div>
+                </div>
+                {% if g.user['id'] == post['author_id'] %}
+                    <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+                {% endif %}
+            </header>
+            <p class="body">{{ post['body'] }}</p>
+            <div class="actions">
+                {% if g.user %}
+                <form action="{{ url_for('blog.like', id=post['id']) }}" method="post" style="display: inline;">
+                    <button type="submit" class="like-button{% if post['user_action'] == 1 %} active{% endif %}">
+                        👍 ({{ post['like_count'] }})
+                    </button>
+                </form>
+                <form action="{{ url_for('blog.dislike', id=post['id']) }}" method="post" style="display: inline;">
+                    <button type="submit" class="dislike-button{% if post['user_action'] == -1 %} active{% endif %}">
+                        👎 ({{ post['dislike_count'] }})
+                    </button>
+                </form>
+                {% else %}
+                    <span>👍 : {{ post['like_count'] }} | 👎 : {{ post['dislike_count'] }} </span>
+                {% endif %}
+            </div>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
