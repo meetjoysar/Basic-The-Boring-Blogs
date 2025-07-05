@@ -1,5 +1,4 @@
-# Flask Blog Tutorial Project
-
+# Basic-The-Boring-Blogs
 A simple blog application built with Flask, featuring retro-themed like and dislike buttons inspired by 80s arcade aesthetics.
 
 ## Features
